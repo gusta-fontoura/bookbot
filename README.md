@@ -1,4 +1,3 @@
 # bookbot
 
-BookBot is my first project in Boot.dev
-(https://github.com/gusta-fontoura/bookbot)
+BookBot is my first [Boot.dev](https://www.boot.dev) project!
