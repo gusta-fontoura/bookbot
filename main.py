@@ -1,33 +1,41 @@
-def count_words(file_contents):
-    result = {}
-    for letter in file_contents.lower():
-        if letter in result:
-            result[letter] += 1
-        else:
-            result[letter] = 1
-    return result
-
-def print_report(result, total):
-    print("--- Begin report of books/frankenstein.txt ---")
-    print(f"{total} words found in the document")
-
-    sorted_result = sorted(result.items(), key=lambda x:x[1], reverse=True)
-    converted_dict = dict(sorted_result)
-    
-    for letter in converted_dict:
-        if letter.isalpha():
-            number = converted_dict[letter]
-            print(f"The '{letter}' character was found {number} times")
-
+import sys
+from stats import (
+    get_num_words,
+    chars_dict_to_sorted_list,
+    get_chars_dict,
+)
 
 
 def main():
-    with open("books/frankenstein.txt") as f:
-        file_contents = f.read()
-        total = len(file_contents.split())
-        print(f"total = {total}")
-        result = count_words(file_contents)
-        print_report(result, total)
+    if len(sys.argv) < 2:
+        print("Usage: python3 main.py <path_to_book>")
+        sys.exit(1)
+    book_path = sys.argv[1]
+
+    text = get_book_text(book_path)
+    num_words = get_num_words(text)
+    chars_dict = get_chars_dict(text)
+    chars_sorted_list = chars_dict_to_sorted_list(chars_dict)
+    print_report(book_path, num_words, chars_sorted_list)
+
+
+def get_book_text(path):
+    with open(path) as f:
+        return f.read()
+
+
+def print_report(book_path, num_words, chars_sorted_list):
+    print("============ BOOKBOT ============")
+    print(f"Analyzing book found at {book_path}...")
+    print("----------- Word Count ----------")
+    print(f"Found {num_words} total words")
+    print("--------- Character Count -------")
+    for item in chars_sorted_list:
+        if not item["char"].isalpha():
+            continue
+        print(f"{item['char']}: {item['num']}")
+
+    print("============= END ===============")
 
 
 main()
